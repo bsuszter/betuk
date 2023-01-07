@@ -1,3 +1,24 @@
+@media only screen and (max-width: 400px) {
+    .container{
+        height: 650px!important;
+    }
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 550px;
+    background-color:MidnightBlue;
+    border-radius: 15px;
+    border: 5px solid DodgerBlue;
+    text-align: center;
+}
+
+p{
+    color: white;
+}
+
 .maganhangzo, .massalhangzo{
     width: 100%;
 /*     height: 100px; */
@@ -30,5 +51,5 @@
     font-size: 26px;
     margin-top: 10px;
     margin-bottom: 30px;
-    color: brown;
+    color: gold;
 }

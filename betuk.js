@@ -12,7 +12,7 @@ var massalhangzo_kell = "hamis";
 
 document.getElementById("ujGomb").style.display = "none";
 document.getElementById("ujra").style.display = "none";
-document.getElementById("ellenorzes").style.display = "none";
+document.getElementById("ellenorzes").style.display = "block";
 document.getElementById("ellenorzesvege").style.display = "none";
 document.getElementById("helpkeret").style.visibility = "hidden";
 document.getElementById("alertbox").style.display = "none"; 
@@ -27,6 +27,7 @@ var massalhangzok_szama = msh.length;
 var feladvany_szama = feladvany.length;
 
 var tomb = kever(feladvany_szama);
+const jatekos_valasza = [];
 
 //az indit eljárásban ezzel számoljuk a megoldott (elindított) feladványok sorszámát
 var szamlalo = 0;
@@ -90,7 +91,7 @@ if (massalhangzo_kell == "igaz") {
 
     /* A magánhangzó betűdobozokra kattintás */
     $doboz2.click(function(event){
-        //ha az aktuális betűre kattintanak, akkor akítvvá teszi (piros)ő
+        //ha az aktuális betűre kattintanak, akkor akítvvá teszi (piros)
         if (this.style.backgroundColor == alapszin_mgh) {
             this.style.backgroundColor = kivalasztott_szin_mgh;
         }
@@ -112,24 +113,6 @@ if (massalhangzo_kell == "igaz") {
         }
     });
 
-    $('#ellenorzes').click(function() {
-        for (let index = 0; index <maganhangzok_szama; index++) {
-            //megvizsgálja, melyik betű van kiválasztva
-            if (maganhangzok_osztaly[index].style.backgroundColor == kivalasztott_szin_mgh) {
-                console.log(mgh[index]);
-            }
-            
-        }
-
-        for (let index = 0; index <massalhangzok_szama; index++) {
-            //megvizsgálja, melyik betű van kiválasztva
-            if (massalhangzok_osztaly[index].style.backgroundColor == kivalasztott_szin_msh) {
-                console.log(msh[index]);
-            }
-            
-        }
-    });
-
     $("#indit").click(indit);
 
     function indit() {
@@ -141,3 +124,66 @@ if (massalhangzo_kell == "igaz") {
         szamlalo += 1;
 
     }
+
+    
+    $('#ellenorzes').click(function() {
+        if (maganhangzo_kell == "igaz") {
+            for (let index = 0; index <maganhangzok_szama; index++) {
+                //megvizsgálja, melyik betű van kiválasztva
+                if (maganhangzok_osztaly[index].style.backgroundColor == kivalasztott_szin_mgh) {
+                    jatekos_valasza.push(mgh[index]);
+                    console.log(mgh[index]);
+                } 
+            }
+            var elfogadott_valszok = feladvany[tomb[szamlalo - 1]][2];
+
+            for (let index = 0; index < feladvany[tomb[szamlalo - 1]][2].length; index++) {
+
+                if (jatekos_valasza.includes(elfogadott_valszok[index])) {
+                    for (let indexj = 0; indexj < maganhangzok_szama; indexj++) {
+                        if (maganhangzok_osztaly[indexj].innerHTML == elfogadott_valszok[index]) {
+                            maganhangzok_osztaly[indexj].style.backgroundColor = "green"
+                        }                
+                    }
+                }
+                
+            }
+
+            for (let indexj = 0; indexj < maganhangzok_szama; indexj++) {
+                if (maganhangzok_osztaly[indexj].style.backgroundColor == kivalasztott_szin_mgh) {
+                    maganhangzok_osztaly[indexj].style.backgroundColor = "red"
+                }                
+            }
+
+
+    
+        }
+        if (massalhangzo_kell == "igaz") {
+            for (let index = 0; index <massalhangzok_szama; index++) {
+                //megvizsgálja, melyik betű van kiválasztva
+                if (massalhangzok_osztaly[index].style.backgroundColor == kivalasztott_szin_msh) {
+                    console.log(msh[index]);
+                }
+                
+            }
+            var elfogadott_valszok = feladvany[tomb[szamlalo - 1]][2];
+
+            for (let index = 0; index < feladvany[tomb[szamlalo - 1]][2].length; index++) {
+
+                if (jatekos_valasza.includes(elfogadott_valszok[index])) {
+                    for (let indexj = 0; indexj < massalhangzok_szama; indexj++) {
+                        if (massalhangzok_osztaly[indexj].innerHTML == elfogadott_valszok[index]) {
+                            massalhangzok_osztaly[indexj].style.backgroundColor = "green"
+                        }                
+                    }
+                }
+                
+            }
+
+            for (let indexj = 0; indexj < massalhangzok_szama; indexj++) {
+                if (massalhangzok_osztaly[indexj].style.backgroundColor == kivalasztott_szin_mgh) {
+                    massalhangzok_osztaly[indexj].style.backgroundColor = "red"
+                }                
+            }
+        }
+        });
