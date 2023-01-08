@@ -1,6 +1,20 @@
 @media only screen and (max-width: 400px) {
     .container{
-        height: 650px!important;
+        height: 670px!important;
+    }
+
+    .doboz2, .doboz{
+        width: 30px!important;
+        height: 30px!important;
+        font-size: 14px!important;
+    }
+
+    p{
+        font-size: 14px!important;
+    }
+
+    .mondat{
+        font-size: 16px!important;
     }
 }
 
@@ -17,6 +31,7 @@
 
 p{
     color: white;
+    margin-top: 10px;
 }
 
 .maganhangzo, .massalhangzo{

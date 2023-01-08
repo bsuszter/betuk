@@ -1,7 +1,15 @@
+//az utolsó elem határozza meg, hogy magánhangzókat akarunk-e használni
 feladvany = [
-/*     ["k__r", "magas hangrendű", "éöű", "igaz"],
-    ["t__r", "mély hangrendű", "aáoú", "igaz"], */
+     ["k__r", "magas hangrendű", "éöű", "igaz"],
+    ["t__r", "mély hangrendű", "aáoú", "igaz"], 
     ["ké__", "főnév szófajú", "jkmn5psz", "hamis"],
+    ["ké__", "ige szófajú", "lr", "hamis"],
+    ["ké__", "melléknék szófajú", "k6t", "hamis"],
+    ["ké__", "számnév szófajú", "t", "hamis"],
+    ["t__r", "értelmes szó (nem tulajdonnév)", "aáéoöőúű", "igaz"],
+    ["t__l", "értelmes szó (nem tulajdonnév)", "áéoú", "igaz"],
+    ["l__g", "értelmes szó (nem tulajdonnév)", "éóú", "igaz"],
+    ["r__g", "értelmes szó (nem tulajdonnév)", "aáéöú", "igaz"],
 ]
 
 mgh = ["a","á","e","é","i","í","o","ó","ö","ő","u","ú","ü","ű"]
@@ -13,16 +21,14 @@ msh2 = ["b","c","1","d","2","3","f","g","4","h","j","k","l","m","n","5","p","r",
 /* var maganhangzo_kell = "igaz";
 var massalhangzo_kell = "hamis"; */
 
-document.getElementById("ujGomb").style.display = "none";
-document.getElementById("ujra").style.visibility = "hidden";
-document.getElementById("ellenorzes").style.display = "block";
-document.getElementById("ellenorzesvege").style.display = "none";
-document.getElementById("helpkeret").style.visibility = "hidden";
-document.getElementById("alertbox").style.display = "none"; 
-document.getElementById("ellenorzes").style.visibility = "hidden";
-document.getElementById("maganhangzo").style.visibility = "hidden";
+//document.getElementById("ellenorzes").style.display = "block";
+//document.getElementById("ellenorzes").style.visibility = "hidden";
+document.getElementById("ellenorzes").style.display = "none";
+document.getElementById("ujra").style.display = "none";
+document.getElementById("maganhangzo").style.display = "none";
+document.getElementById("massalhangzo").style.display = "none";
 
-
+var lehet = 0;
 
 var alapszin_mgh = "moccasin";
 var alapszin_msh = "tomato";
@@ -43,7 +49,21 @@ const jatekos_valasza = [];
 //az indit eljárásban ezzel számoljuk a megoldott (elindított) feladványok sorszámát
 var szamlalo = 0;
 
+
+function progressbar(){
+    let viszonyszam = 100 / feladvany_szama;
+    // progress bar programozása a kérdések számának jelöléséhez
+    let $progressBar = $('.progress-bar');
+    $progressBar.text(szamlalo);
+    // 30 kérdésre elosztva a 100%
+    $progressBar.css('width', (viszonyszam * szamlalo  + '%'));
+    //$progressBar.css('width', (kerdesszam * 100 / viszonyszam) + '%');
+}
+
+
 document.getElementById("feladvany").style.visibility = "hidden";
+
+    //HA MAGÁNHANGZÓK KELLENEK
     /* annyi div elem létrehozása egyeni azonosítóval (id), amennyi mgh van*/
     for (let index = 0; index <maganhangzok_szama; index++) {
 
@@ -67,6 +87,7 @@ document.getElementById("feladvany").style.visibility = "hidden";
         maganhangzok_osztaly[index].style.backgroundColor = alapszin_mgh;  
     }
     
+    //HA MÁSSALHANGZÓK KELLENEK
     for (let index = 0; index <massalhangzok_szama; index++) {
 
         var block_to_insertdoboz ;
@@ -95,59 +116,73 @@ document.getElementById("feladvany").style.visibility = "hidden";
 
     /* A magánhangzó betűdobozokra kattintás */
     $doboz2.click(function(event){
-        //ha az aktuális betűre kattintanak, akkor akítvvá teszi (piros)
-        if (this.style.backgroundColor == alapszin_mgh) {
-            this.style.backgroundColor = kivalasztott_szin_mgh;
-        }
-        else
-        {
-            this.style.backgroundColor = alapszin_mgh;  
-        }
+        if (lehet == 1) {      
+                //ha az aktuális betűre kattintanak, akkor akítvvá teszi
+                if (this.style.backgroundColor == alapszin_mgh) {
+                    this.style.backgroundColor = kivalasztott_szin_mgh;
+                }
+                else
+                {
+                    this.style.backgroundColor = alapszin_mgh;  
+                }
+    }
     });
     
     /* A mássalhangzó betűdobozokra kattintás */
     $doboz.click(function(event){
-        //ha az aktuális betűre kattintanak, akkor akítvvá teszi (piros)ő
-        if (this.style.backgroundColor == alapszin_msh) {
-            this.style.backgroundColor = kivalasztott_szin_msh;
-        }
-        else
-        {
-            this.style.backgroundColor = alapszin_msh;  
-        }
+        if (lehet == 1) {
+                //ha az aktuális betűre kattintanak, akkor akítvvá teszi
+                if (this.style.backgroundColor == alapszin_msh) {
+                    this.style.backgroundColor = kivalasztott_szin_msh;
+                }
+                else
+                {
+                    this.style.backgroundColor = alapszin_msh;  
+                }
+            }
     });
 
-    document.getElementById("maganhangzo").style.visibility = "hidden";
-    document.getElementById("massalhangzo").style.visibility = "hidden";
+    
+    document.getElementById("maganhangzo").style.display = "none";
+    document.getElementById("massalhangzo").style.display = "none";
 
 
     $("#indit").click(indit);
     function indit() {
+        lehet = 1;
         jo_valasz = 0;
         //amíg van feladvány, addig dolgozik
         if (szamlalo < feladvany_szama) {
+            //HA MAGÁNHANGZÓ KELL
             maganhangzo_kell = feladvany[tomb[szamlalo]][3];
             //console.log(maganhangzo_kell)
                 //minden betűnek alapszín beállítva
                 if (maganhangzo_kell == "igaz") {
-                    document.getElementById("maganhangzo").style.visibility = "visible";
-                    document.getElementById("massalhangzo").style.visibility = "hidden";
+                    document.getElementById("maganhangzo").style.display = "flex";
+                    document.getElementById("massalhangzo").style.display = "none";
+/*                     document.getElementById("maganhangzo").style.visibility = "visible";
+                    document.getElementById("massalhangzo").style.visibility = "hidden"; */
                     for (let index = 0; index < maganhangzok_szama; index++) {
                         maganhangzok_osztaly[index].style.backgroundColor = alapszin_mgh;  
                     }
+                //HA MÁSSALHANGZÓ KELL
                 } else  {
                     //console.log("itt vagy")
-                    document.getElementById("maganhangzo").style.visibility = "hidden";
-                    document.getElementById("massalhangzo").style.visibility = "visible";
+                    document.getElementById("maganhangzo").style.display = "none";
+                    document.getElementById("massalhangzo").style.display = "flex";
+/*                     document.getElementById("maganhangzo").style.visibility = "hidden";
+                    document.getElementById("massalhangzo").style.visibility = "visible"; */
                     for (let index = 0; index < massalhangzok_szama; index++) {
                         massalhangzok_osztaly[index].style.backgroundColor = alapszin_msh;  
                     }
                 }
 
                 document.getElementById("feladvany").style.visibility = "visible";
-                document.getElementById("indit").style.visibility = "hidden";
+                document.getElementById("indit").style.display = "none";
+                //document.getElementById("indit").style.visibility = "hidden";
                 document.getElementById("ertekeles").style.visibility = "hidden";
-                document.getElementById("ellenorzes").style.visibility = "visible";
+                document.getElementById("ellenorzes").style.display = "block";
+                //document.getElementById("ellenorzes").style.visibility = "visible";
 
                 if (szamlalo < feladvany_szama) {
                     document.getElementById( 'mondat' ).innerHTML = feladvany[tomb[szamlalo]][0];
@@ -156,18 +191,27 @@ document.getElementById("feladvany").style.visibility = "hidden";
                 szamlalo += 1;
 
             } else {
-                document.getElementById("ujra").style.visibility = "visible";
-                document.getElementById("indit").style.visibility = "hidden";
-                document.getElementById("ellenorzes").style.visibility = "hidden";
+                //document.getElementById("ujra").style.visibility = "visible";
+                document.getElementById("ujra").style.display = "block";
+                document.getElementById("indit").style.display = "none";
+                //document.getElementById("indit").style.visibility = "hidden";
+                document.getElementById("ellenorzes").style.display = "none";
+                //document.getElementById("ellenorzes").style.visibility = "hidden";
             }
+            progressbar();
     }
 
 
     
     $('#ellenorzes').click(function() {
+        //a korábbi válaszok kiürítése
+        lehet = 0;
+        const jatekos_valasza = [];
         document.getElementById("ertekeles").style.visibility = "visible";
-        document.getElementById("indit").style.visibility = "visible";
-        document.getElementById("ellenorzes").style.visibility = "hidden";
+        document.getElementById("indit").style.display = "block";
+        //document.getElementById("indit").style.visibility = "visible";
+        document.getElementById("ellenorzes").style.display = "none";
+        //document.getElementById("ellenorzes").style.visibility = "hidden";
 
         //akkor dolgozik, ha magánhangókkal játszunk
         if (maganhangzo_kell == "igaz") {
@@ -182,6 +226,7 @@ document.getElementById("feladvany").style.visibility = "hidden";
             }
             //beteszi egy listába a helyes válaszokat
             var elfogadott_valszok = feladvany[tomb[szamlalo - 1]][2];
+            console.log(elfogadott_valszok, jatekos_valasza)
             var elfogadott_valszok_szama = elfogadott_valszok.length;
             //végignézi a helyes válaszokat 
             for (let index = 0; index < elfogadott_valszok_szama; index++) {
@@ -193,6 +238,7 @@ document.getElementById("feladvany").style.visibility = "hidden";
                         if (maganhangzok_osztaly[indexj].innerHTML == elfogadott_valszok[index]) {
                             //console.log("bent vok" +  maganhangzok_osztaly[indexj].innerHTML)
                             //zöldre festi azt a betűt
+                            
                             maganhangzok_osztaly[indexj].style.backgroundColor = "green";
                             jo_valasz += 1;
                         }                
