@@ -1,10 +1,12 @@
 feladvany = [
-    ["k__r", "magas hangrendű", "éöű", "igaz"],
-    ["t__r", "mély hangrendű", "aáoú", "hamis"],
+/*     ["k__r", "magas hangrendű", "éöű", "igaz"],
+    ["t__r", "mély hangrendű", "aáoú", "igaz"], */
+    ["ké__", "főnév szófajú", "jkmn5psz", "hamis"],
 ]
 
 mgh = ["a","á","e","é","i","í","o","ó","ö","ő","u","ú","ü","ű"]
 msh = ["b","c","cs","d","dz","dzs","f","g","gy","h","j","k","l","m","n","ny","p","r","s","sz","t","ty","v","z","zs"]
+msh2 = ["b","c","1","d","2","3","f","g","4","h","j","k","l","m","n","5","p","r","s","6","t","7","v","z","8"]
 
 //itt lehet beállítani, hogy melyik betűkészletet akarjuk használni: igaz vagy hamis lehet az érték
 //CSAK AZ EGYIK LEHET IGAZ
@@ -34,7 +36,7 @@ var feladvany_szama = feladvany.length;
 var jo_valasz = 0;
 
 var tomb = kever(feladvany_szama);
-console.log(feladvany[tomb[0]])
+//console.log(feladvany[tomb[0]])
 
 const jatekos_valasza = [];
 
@@ -125,7 +127,7 @@ document.getElementById("feladvany").style.visibility = "hidden";
         //amíg van feladvány, addig dolgozik
         if (szamlalo < feladvany_szama) {
             maganhangzo_kell = feladvany[tomb[szamlalo]][3];
-            console.log(maganhangzo_kell)
+            //console.log(maganhangzo_kell)
                 //minden betűnek alapszín beállítva
                 if (maganhangzo_kell == "igaz") {
                     document.getElementById("maganhangzo").style.visibility = "visible";
@@ -134,7 +136,7 @@ document.getElementById("feladvany").style.visibility = "hidden";
                         maganhangzok_osztaly[index].style.backgroundColor = alapszin_mgh;  
                     }
                 } else  {
-                    console.log("itt vagy")
+                    //console.log("itt vagy")
                     document.getElementById("maganhangzo").style.visibility = "hidden";
                     document.getElementById("massalhangzo").style.visibility = "visible";
                     for (let index = 0; index < massalhangzok_szama; index++) {
@@ -210,7 +212,7 @@ document.getElementById("feladvany").style.visibility = "hidden";
 
             var szoveg1 = "A feladatnak " + elfogadott_valszok_szama + " helyes megoldása van. ";
             var hianyzik = elfogadott_valszok_szama - jo_valasz;
-            console.log(hianyzik);
+            //console.log(hianyzik);
             if (hianyzik <= 0) {
                 var szoveg2 = "Mindegyik meg lett jelölve";
             } else {
@@ -224,25 +226,32 @@ document.getElementById("feladvany").style.visibility = "hidden";
     
         }
 
+        
         //a magyarázatot lásd: a magánhangzós résznél
         if (maganhangzo_kell != "igaz") {
             for (let index = 0; index <massalhangzok_szama; index++) {
                 //megvizsgálja, melyik betű van kiválasztva
                 if (massalhangzok_osztaly[index].style.backgroundColor == kivalasztott_szin_msh) {
-                    jatekos_valasza.push(msh[index]);
+                    jatekos_valasza.push(msh2[index]);
                     //console.log(msh[index]);
                 }
                 
             }
 
+
             var elfogadott_valszok = feladvany[tomb[szamlalo - 1]][2];
             var elfogadott_valszok_szama = elfogadott_valszok.length;
+            //console.log("jartekos valasza " + jatekos_valasza)
+            //console.log("elfogadott " + elfogadott_valszok)
+
 
             for (let index = 0; index < elfogadott_valszok_szama; index++) {
 
                 if (jatekos_valasza.includes(elfogadott_valszok[index])) {
                     for (let indexj = 0; indexj < massalhangzok_szama; indexj++) {
-                        if (massalhangzok_osztaly[indexj].innerHTML == elfogadott_valszok[index]) {
+                        //console.log("mi ez " + msh2[indexj])
+                        if ( msh2[indexj] == elfogadott_valszok[index]) {
+                        //if (massalhangzok_osztaly[indexj].innerHTML == elfogadott_valszok[index]) {
                             massalhangzok_osztaly[indexj].style.backgroundColor = "green"
                             jo_valasz += 1;
                         }                
@@ -257,10 +266,16 @@ document.getElementById("feladvany").style.visibility = "hidden";
                 }                
             }
 
-            document.getElementById("ertekeles").innerHTML = "A feladatnak " + elfogadott_valszok_szama + " helyes megoldása van. " + (elfogadott_valszok_szama - jo_valasz) + " megoldás nem lett megjelölve."
-            console.log("ennyi jó van: " + elfogadott_valszok_szama)
-            console.log("játékos: " + jatekos_valasza)
-            console.log(feladvany[tomb[szamlalo - 1]][2]);
+            var szoveg1 = "A feladatnak " + elfogadott_valszok_szama + " helyes megoldása van. ";
+            var hianyzik = elfogadott_valszok_szama - jo_valasz;
+            //console.log(hianyzik);
+            if (hianyzik <= 0) {
+                var szoveg2 = "Mindegyik meg lett jelölve";
+            } else {
+                var szoveg2 = hianyzik + " jó megoldás megjelölése hiányzik.";
+            }
+
+            document.getElementById("ertekeles").innerHTML = szoveg1 + szoveg2;
         }
     
 });
